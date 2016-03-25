@@ -25,7 +25,6 @@ function mybbpgp_info()
 
 function mybbpgp_install()
 {
-    //Todo: Create a database table for public key storage.
 	global $mybb, $db, $cache;
 	
 	if (!$db->table_exists("mybbpgp_publickeys")) {
@@ -48,7 +47,10 @@ function mybbpgp_is_installed()
 
 function mybbpgp_uninstall()
 {
-
+	global $mybb, $db, $cache;
+	if ($db->table_exists("mybbpgp_publickeys")) {
+		$db->query("DROP TABLE IF EXISTS `" . TABLE_PREFIX . "mybbpgp_publickeys`");
+	}
 }
 
 function mybbpgp_activate()
