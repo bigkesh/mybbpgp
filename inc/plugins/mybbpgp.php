@@ -26,11 +26,24 @@ function mybbpgp_info()
 function mybbpgp_install()
 {
     //Todo: Create a database table for public key storage.
+	global $mybb, $db, $cache;
+	
+	if (!$db->table_exists("mybbpgp_publickeys")) {
+		$db->query("CREATE TABLE IF NOT EXISTS `" . TABLE_PREFIX . "mybbpgp_publickeys` (
+			`id` smallint(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid` INT unsigned NOT NULL,
+			`pgpkey` BLOB NOT NULL,
+			`fingerprint` BINARY(20) NOT NULL,
+			PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+	}
 }
 
 function mybbpgp_is_installed()
 {
-    return true; //We don't yet do anything during installation
+	global $mybb, $db, $cache;
+
+	return $db->table_exists("mybbpgp_publickeys");
 }
 
 function mybbpgp_uninstall()
